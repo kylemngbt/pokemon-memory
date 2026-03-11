@@ -2,8 +2,6 @@
 
 A retro Pokémon-themed memory card game built with React + TypeScript. Test your memory by clicking each Pokémon card only once — the cards shuffle after every click!
 
-Inspired by [PokéMemo](https://github.com/Sharkri/pokememo) by Sharkri.
-
 ---
 
 ## Live Preview
@@ -35,14 +33,14 @@ Inspired by [PokéMemo](https://github.com/Sharkri/pokememo) by Sharkri.
 
 ## Features
 
-- 🎮 NES-style dialog UI with pixel font (Press Start 2P)
-- 🃏 Card flip animations with back/front reveal
-- 🌀 3D tilt hover effect on cards via `react-parallax-tilt`
-- 🔀 Cards shuffle after every click
-- 🏆 Best score persisted across sessions via `localStorage`
-- 📡 Random Pokémon fetched from [PokéAPI](https://pokeapi.co/) (1010+ pool)
-- ⚡ In-memory Pokémon caching to avoid duplicate fetches
-- ⌨️ Keyboard navigation on difficulty select (↑ ↓ Enter)
+- NES-style dialog UI with pixel font (Press Start 2P)
+- Card flip animations with back/front reveal
+- D tilt hover effect on cards via `react-parallax-tilt`
+- Cards shuffle after every click
+- Best score persisted across sessions via `localStorage`
+- Random Pokémon fetched from [PokéAPI](https://pokeapi.co/) (1010+ pool)
+- In-memory Pokémon caching to avoid duplicate fetches
+- Keyboard navigation on difficulty select (↑ ↓ Enter)
 
 ---
 
