@@ -184,7 +184,7 @@ export default function DifficultySelect({ onSelect }: DifficultySelectProps) {
 
           <div
             className="nes-footer"
-            onClick={() => window.open("https://github.com/kylemngbt/pokemon-memory-game", "_blank")}
+            onClick={() => window.open("https://github.com/kylemngbt/pokemon-memory", "_blank")}
           >
             GITHUB REPO
           </div>
