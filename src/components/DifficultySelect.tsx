@@ -8,10 +8,16 @@ const DIFFICULTIES = [
 
 interface DifficultySelectProps {
   onSelect?: (difficulty: string) => void;
+  onNavigate?: () => void;
 }
 
-export default function DifficultySelect({ onSelect }: DifficultySelectProps) {
+export default function DifficultySelect({ onSelect, onNavigate }: DifficultySelectProps) {
   const [cursor, setCursor] = useState("medium");
+
+  const moveCursor = (id: string) => {
+    setCursor(id);
+    onNavigate?.();
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -19,12 +25,12 @@ export default function DifficultySelect({ onSelect }: DifficultySelectProps) {
 
       if (e.key === "ArrowDown") {
         const next = DIFFICULTIES[currentIndex + 1];
-        if (next) setCursor(next.id);
+        if (next) moveCursor(next.id);
       }
 
       if (e.key === "ArrowUp") {
         const prev = DIFFICULTIES[currentIndex - 1];
-        if (prev) setCursor(prev.id);
+        if (prev) moveCursor(prev.id);
       }
 
       if (e.key === "Enter") {
@@ -34,7 +40,7 @@ export default function DifficultySelect({ onSelect }: DifficultySelectProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [cursor, onSelect]);
+  }, [cursor, onSelect, onNavigate]);
 
   return (
     <>
@@ -174,7 +180,9 @@ export default function DifficultySelect({ onSelect }: DifficultySelectProps) {
                 key={d.id}
                 className={`difficulty-item ${cursor === d.id ? "selected" : ""}`}
                 onClick={() => { setCursor(d.id); if (onSelect) onSelect(d.id); }}
-                onMouseEnter={() => setCursor(d.id)}
+                onMouseEnter={() => {
+                  if (cursor !== d.id) moveCursor(d.id);
+                }}
               >
                 <span className="cursor-arrow">▶</span>
                 <span className="label">{d.label}</span>

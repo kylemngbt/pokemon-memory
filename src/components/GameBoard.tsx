@@ -7,6 +7,7 @@ interface GameBoardProps {
   difficulty: string;
   onGameOver: (finalScore: number) => void;
   onWin: (finalScore: number) => void;
+  onCardFlip: () => void;  // add this
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -19,7 +20,7 @@ const DIFFICULTY_LABEL: Record<string, string> = {
   hard: "Hard",
 };
 
-export default function GameBoard({ pokemon, difficulty, onGameOver, onWin }: GameBoardProps) {
+export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCardFlip }: GameBoardProps) {
   const [cards, setCards] = useState<Pokemon[]>([]);
   const [clicked, setClicked] = useState<Set<number>>(new Set());
   const [score, setScore] = useState(0);
@@ -38,6 +39,7 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin }: Ga
 
   const handleCardClick = useCallback((id: number) => {
     if (isShuffling) return;
+    onCardFlip();
 
     // Already clicked — game over
     if (clicked.has(id)) {
