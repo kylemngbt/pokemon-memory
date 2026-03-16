@@ -7,7 +7,9 @@ interface GameBoardProps {
   difficulty: string;
   onGameOver: (finalScore: number) => void;
   onWin: (finalScore: number) => void;
-  onCardFlip: () => void;  // add this
+  onCardFlip: () => void;
+  onQuit: () => void;
+  onButtonSound: () => void;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -20,7 +22,7 @@ const DIFFICULTY_LABEL: Record<string, string> = {
   hard: "Hard",
 };
 
-export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCardFlip }: GameBoardProps) {
+export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCardFlip, onQuit, onButtonSound }: GameBoardProps) {
   const [cards, setCards] = useState<Pokemon[]>([]);
   const [clicked, setClicked] = useState<Set<number>>(new Set());
   const [score, setScore] = useState(0);
@@ -31,6 +33,7 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
   const [isShuffling, setIsShuffling] = useState(false);
   const [cardsShowing, setCardsShowing] = useState(true);
   const [shuffleCount, setShuffleCount] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Initial shuffle on mount
   useEffect(() => {
@@ -78,7 +81,7 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
       setIsShuffling(false);
     }, 800);
 
-  }, [clicked, score, bestScore, isShuffling, pokemon, onGameOver, onWin]);
+  }, [clicked, score, bestScore, isShuffling, pokemon, onGameOver, onWin, onCardFlip]);
 
   return (
     <>
@@ -103,21 +106,39 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
           align-items: center;
           gap: 10px;
           margin-bottom: 16px;
+          cursor: pointer;
+          user-select: none;
         }
 
-        .game-title img {
+        .title-logo {
           width: 42px;
           height: 42px;
+          transition: transform 0.3s ease;
+        }
+
+        .game-title:hover .title-logo {
+          animation: spin 0.8s linear infinite;
+        }
+
+        .title-text {
+          font-size: 20px;
+          color: #fff;
+          letter-spacing: 1px;
+          display: inline-block;
+          transition: transform 0.2s ease;
+        }
+
+        .game-title:hover .title-text {
+          transform: scale(1.08);
         }
 
         .game-title .poke {
           color: #ff1616;
         }
 
-        .game-title span {
-          font-size: 20px;
-          color: #fff;
-          letter-spacing: 1px;
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
 
         .scoreboard {
@@ -156,13 +177,90 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
           color: #252525;
           margin-bottom: 8px;
         }
+
+        /* Confirm dialog */
+        .confirm-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.55);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 100;
+          font-family: 'Press Start 2P', monospace;
+        }
+
+        .confirm-dialog {
+          background: #fff;
+          border: 4px solid #000;
+          box-shadow:
+            inset -4px -4px 0 #999,
+            inset 4px 4px 0 #fff,
+            8px 8px 0 rgba(0,0,0,0.3);
+          padding: 28px 36px 32px 36px;
+          min-width: 320px;
+          max-width: 380px;
+          width: 90vw;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .confirm-dialog::before {
+          content: '';
+          position: absolute;
+          inset: 6px;
+          border: 2px solid #000;
+          pointer-events: none;
+        }
+
+        .confirm-title {
+          font-size: 11px;
+          color: #242424;
+          text-align: center;
+          line-height: 2;
+        }
+
+        .confirm-divider {
+          width: 100%;
+          height: 2px;
+          background: #000;
+        }
+
+        .confirm-actions {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .confirm-btn {
+          font-family: 'Press Start 2P', monospace;
+          font-size: 10px;
+          color: #242424;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px 0;
+          transition: color 0.05s;
+          letter-spacing: 0.5px;
+        }
+
+        .confirm-btn:hover {
+          color: #000;
+          text-decoration: underline;
+        }
       `}</style>
 
       <div className="game-board">
         {/* Title */}
-        <div className="game-title">
-          <img src="/pokeball-logo.png" alt="Pokeball" />
-          <span><span className="poke">Poké</span>Memory</span>
+        <div className="game-title" onClick={() => setShowConfirm(true)}>
+          <img className="title-logo" src="/pokeball-logo.png" alt="Pokeball" />
+          <span className="title-text">
+            <span className="poke">Poké</span>Memory
+          </span>
         </div>
 
         {/* Scoreboard */}
@@ -193,6 +291,20 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
           ))}
         </div>
       </div>
+
+      {/* Confirm quit dialog */}
+      {showConfirm && (
+        <div className="confirm-overlay">
+          <div className="confirm-dialog">
+            <p className="confirm-title">Return to menu?<br />Your progress will be lost.</p>
+            <div className="confirm-divider" />
+            <div className="confirm-actions">
+              <button className="confirm-btn" onClick={() => { onButtonSound(); onQuit(); }}>YES</button>
+              <button className="confirm-btn" onClick={() => { onButtonSound(); setShowConfirm(false); }}>NO</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

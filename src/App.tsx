@@ -131,6 +131,8 @@ export default function App() {
           onGameOver={handleGameOver}
           onWin={handleWin}
           onCardFlip={audio.playFlip}
+          onQuit={handleQuit}
+          onButtonSound={audio.playButton}
         />
         {(screen === "gameover" || screen === "win") && (
           <GameOverModal
