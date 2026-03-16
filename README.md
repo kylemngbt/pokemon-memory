@@ -6,7 +6,7 @@ A retro Pokémon-themed memory card game built with React + TypeScript. Test you
 
 ## Live Preview
 
-> Coming soon
+[pokemon-memory-beta.vercel.app](https://pokemon-memory-beta.vercel.app)
 
 ---
 
@@ -18,6 +18,7 @@ A retro Pokémon-themed memory card game built with React + TypeScript. Test you
 - After every click, all cards shuffle into a new order
 - Click a card you've **already clicked** and it's game over
 - Click **all cards** without repeating to win and advance
+- Click the **PokéMemory title** during a game to return to the menu
 
 ---
 
@@ -31,26 +32,15 @@ A retro Pokémon-themed memory card game built with React + TypeScript. Test you
 
 ---
 
-## Features
-
-- NES-style dialog UI with pixel font (Press Start 2P)
-- Card flip animations with back/front reveal
-- D tilt hover effect on cards via `react-parallax-tilt`
-- Cards shuffle after every click
-- Best score persisted across sessions via `localStorage`
-- Random Pokémon fetched from [PokéAPI](https://pokeapi.co/) (1010+ pool)
-- In-memory Pokémon caching to avoid duplicate fetches
-- Keyboard navigation on difficulty select (↑ ↓ Enter)
-
----
-
 ## Tech Stack
 
 - [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS v3](https://tailwindcss.com/)
 - [PokéAPI](https://pokeapi.co/)
+- [Klipy API](https://klipy.co/) — for Pokémon GIFs
 - [react-parallax-tilt](https://github.com/mkosir/react-parallax-tilt)
+- [react-howler](https://github.com/thangngoc89/react-howler) — for BGM
 
 ---
 
@@ -70,11 +60,23 @@ cd pokemon-memory-game
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.example .env
+# Add your Klipy API key to .env
+
 # Start the dev server
 npm run dev
 ```
 
 Then open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Environment Variables
+
+Create a `.env` file in the root of the project:
+
+```
+VITE_KLIPY_API_KEY=your_key_here
+```
 
 ### Build for Production
 
@@ -83,31 +85,3 @@ npm run build
 ```
 
 ---
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── DifficultySelect.tsx   # Opening screen with difficulty options
-│   ├── LoadingScreen.tsx      # Spinning Pokeball loading screen
-│   ├── GameBoard.tsx          # Main game board with scoreboard + card grid
-│   └── PokemonCard.tsx        # Individual card with flip animation + tilt
-├── hooks/
-│   └── usePokemon.ts          # PokeAPI fetch hook with in-memory cache
-├── App.tsx                    # Screen routing and game state
-└── index.css                  # Tailwind + global styles
-
-public/
-├── pokemon-bg.png             # Background image
-├── card-back.png              # Card back image
-└── pokeball-logo.png          # Title logo
-```
-
----
-
-## Roadmap
-
-- [ ] Feature D — Game logic (win/game over screens with Pokémon GIFs)
-- [ ] Feature E — Full win/game over screen UI
-- [ ] Feature F — Audio (BGM + SFX)
