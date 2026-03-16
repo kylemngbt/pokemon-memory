@@ -4,6 +4,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import GameBoard from "./components/GameBoard";
 import GameOverModal from "./components/GameOverModal";
 import BGMToggle from "./components/BGMToggle";
+import WelcomeScreen from "./components/WelcomeScreen";
 import { usePokemon } from "./hooks/usePokemon";
 import { useAudio } from "./hooks/useAudio";
 
@@ -26,6 +27,7 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>("difficulty");
   const [difficulty, setDifficulty] = useState("medium");
   const [finalScore, setFinalScore] = useState(0);
+  const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
   const audio = useAudio();
 
   const handleDifficultySelect = async (selected: string) => {
@@ -70,6 +72,16 @@ export default function App() {
     audio.stopEndGameSounds();
     setScreen("difficulty");
   };
+
+  // Show welcome screen once per session
+  if (!hasSeenWelcome) {
+    return (
+      <>
+        <BGMToggle status="difficulty" />
+        <WelcomeScreen onPlay={() => { audio.playButton(); setHasSeenWelcome(true); }} />
+      </>
+    );
+  }
 
   // Error state
   if (error) return (
