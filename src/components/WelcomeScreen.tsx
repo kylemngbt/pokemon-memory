@@ -121,7 +121,7 @@ export default function WelcomeScreen({ onPlay }: WelcomeScreenProps) {
 
           {/* Instructions */}
           <p className="welcome-instructions">
-            Click on a Pokémon card to score a point. Every click shuffles the cards into a new order. Click the same card twice and it's game over. Remember every card you've clicked and clear the board to win!
+            Click on each Pokémon card once to score a point. After every click, the cards shuffle into a new order. Remember which Pokémon you have already clicked, clicking the same one twice ends the game. Click every card without repeating to win!
           </p>
 
           <div className="welcome-divider" />
