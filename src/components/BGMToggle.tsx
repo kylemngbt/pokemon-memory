@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useState } from "react";
 import ReactHowler from "react-howler";
 import bgmSrc from "../assets/audio/bgm.mp3";
 import buttonSrc from "../assets/audio/button.mp3";
@@ -12,21 +12,6 @@ interface BGMToggleProps {
 
 export default memo(function BGMToggle({ status }: BGMToggleProps) {
   const [isBGMOn, setIsBGMOn] = useState(true);
-
-  const hasStarted = useRef(false);
-  const howlerRef = useRef<any>(null);
-
-  useEffect(() => {
-    const handleFirstMove = () => {
-      if (hasStarted.current) return;
-      hasStarted.current = true;
-      howlerRef.current?.howler?.play();
-      document.removeEventListener("mousemove", handleFirstMove);
-    };
-
-    document.addEventListener("mousemove", handleFirstMove);
-    return () => document.removeEventListener("mousemove", handleFirstMove);
-  }, []);
 
   const isGameOver = status === "gameover" || status === "win";
 
@@ -65,9 +50,7 @@ export default memo(function BGMToggle({ status }: BGMToggleProps) {
         }
       `}</style>
 
-      {/* BGM — always mounted, playing controlled by isBGMOn and game status */}
       <ReactHowler
-        ref={howlerRef}
         src={bgmSrc}
         volume={0.1}
         loop={true}
