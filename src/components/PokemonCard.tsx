@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Tilt from "react-parallax-tilt";
 
 interface PokemonCardProps {
@@ -19,6 +20,28 @@ function capitalizeName(name: string): string {
 const ANIMATION_TIME = 850;
 
 export default function PokemonCard({ name, image, cardsShowing, onClick }: PokemonCardProps) {
+  // Disable tilt on touch devices
+  const isTouchDevice = useMemo(() => window.matchMedia("(hover: none)").matches, []);
+
+  const card = (
+    <div
+      className={`card-container ${cardsShowing ? "" : "back"}`}
+      onClick={onClick}
+    >
+      <div className="card-inner">
+        {/* Front */}
+        <div className="card-front">
+          <img src={image} alt={name} draggable={false} />
+          <span className="card-name">{capitalizeName(name)}</span>
+        </div>
+        {/* Back */}
+        <div className="card-back">
+          <img src="/card-back.png" alt="card back" draggable={false} />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <style>{`
@@ -110,37 +133,60 @@ export default function PokemonCard({ name, image, cardsShowing, onClick }: Poke
           height: 100%;
           object-fit: cover;
         }
+
+        /* Tablet (768px+) */
+        @media (max-width: 768px) {
+          .card-container {
+            width: 150px;
+            height: 210px;
+          }
+
+          .card-front img {
+            width: 150px;
+            height: 165px;
+          }
+
+          .card-name {
+            height: 45px;
+            font-size: 11px;
+          }
+        }
+
+        /* Phone (< 480px) */
+        @media (max-width: 480px) {
+          .card-container {
+            width: 120px;
+            height: 170px;
+          }
+
+          .card-front img {
+            width: 120px;
+            height: 130px;
+          }
+
+          .card-name {
+            height: 40px;
+            font-size: 8px;
+          }
+        }
       `}</style>
 
-      <Tilt
-        tiltReverse={true}
-        reset={true}
-        glareEnable={true}
-        glareMaxOpacity={0.4}
-        glareColor="#fff"
-        glarePosition="all"
-        tiltMaxAngleX={15}
-        tiltMaxAngleY={15}
-        scale={1.05}
-        transitionSpeed={400}
-      >
-        <div
-          className={`card-container ${cardsShowing ? "" : "back"}`}
-          onClick={onClick}
+      {isTouchDevice ? card : (
+        <Tilt
+          tiltReverse={true}
+          reset={true}
+          glareEnable={true}
+          glareMaxOpacity={0.4}
+          glareColor="#fff"
+          glarePosition="all"
+          tiltMaxAngleX={15}
+          tiltMaxAngleY={15}
+          scale={1.05}
+          transitionSpeed={400}
         >
-          <div className="card-inner">
-            {/* Front */}
-            <div className="card-front">
-              <img src={image} alt={name} draggable={false} />
-              <span className="card-name">{capitalizeName(name)}</span>
-            </div>
-            {/* Back */}
-            <div className="card-back">
-              <img src="/card-back.png" alt="card back" draggable={false} />
-            </div>
-          </div>
-        </div>
-      </Tilt>
+          {card}
+        </Tilt>
+      )}
     </>
   );
 }

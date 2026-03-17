@@ -2,10 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 * {
   cursor: url('/cursor-default.png'), auto;
 }
 
 a, button, [role="button"], li, label, [style*="cursor: pointer"], .difficulty-item, .card-container, .modal-btn, .nes-footer, .bgm-toggle {
   cursor: url('/cursor-click.png'), pointer !important;
+}
+
+/* BGM toggle smaller on mobile, scrolls with page */
+@media (max-width: 768px) {
+  .bgm-toggle {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .bgm-toggle img {
+    width: 28px !important;
+    height: 28px !important;
+  }
 }

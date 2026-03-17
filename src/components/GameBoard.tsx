@@ -35,7 +35,6 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
   const [shuffleCount, setShuffleCount] = useState(0);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Initial shuffle on mount
   useEffect(() => {
     setCards(shuffle(pokemon));
   }, [pokemon]);
@@ -44,7 +43,6 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
     if (isShuffling) return;
     onCardFlip();
 
-    // Already clicked — game over
     if (clicked.has(id)) {
       onGameOver(score);
       return;
@@ -55,13 +53,11 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
 
     setScore(newScore);
 
-    // Update best score
     if (newScore > bestScore) {
       setBestScore(newScore);
       localStorage.setItem("bestScore", String(newScore));
     }
 
-    // Win condition — all cards clicked without repeating
     if (newClicked.size === pokemon.length) {
       onWin(newScore);
       return;
@@ -69,11 +65,8 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
 
     setClicked(newClicked);
     setIsShuffling(true);
-
-    // Flip to back
     setCardsShowing(false);
 
-    // After back is fully shown — shuffle and flip to front simultaneously
     setTimeout(() => {
       setCards(shuffle(pokemon));
       setShuffleCount(c => c + 1);
@@ -252,10 +245,94 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
           color: #000;
           text-decoration: underline;
         }
+
+        /* Tablet (max 768px) */
+        @media (max-width: 768px) {
+          .game-board {
+            padding: 16px 12px 32px 12px;
+          }
+
+          .title-logo {
+            width: 32px;
+            height: 32px;
+          }
+
+          .title-text {
+            font-size: 16px;
+          }
+
+          .score-row {
+            font-size: 11px;
+          }
+
+          .progress {
+            font-size: 11px;
+            margin-bottom: 16px;
+          }
+
+          .difficulty-badge {
+            font-size: 8px;
+          }
+
+          .card-grid {
+            gap: 12px;
+            padding: 0 12px;
+          }
+
+          .confirm-dialog {
+            padding: 20px 24px 24px 24px;
+            min-width: unset;
+          }
+
+          .confirm-title {
+            font-size: 9px;
+          }
+        }
+
+        /* Phone (max 480px) */
+        @media (max-width: 480px) {
+          .game-board {
+            padding: 12px 8px 24px 8px;
+          }
+
+          .title-logo {
+            width: 26px;
+            height: 26px;
+          }
+
+          .title-text {
+            font-size: 13px;
+          }
+
+          .score-row {
+            font-size: 9px;
+          }
+
+          .progress {
+            font-size: 9px;
+            margin-bottom: 12px;
+          }
+
+          .difficulty-badge {
+            font-size: 7px;
+          }
+
+          .card-grid {
+            gap: 8px;
+            padding: 0 8px;
+          }
+
+          .confirm-title {
+            font-size: 8px;
+          }
+
+          .confirm-btn {
+            font-size: 9px;
+          }
+        }
       `}</style>
 
       <div className="game-board">
-        {/* Title */}
         <div className="game-title" onClick={() => setShowConfirm(true)}>
           <img className="title-logo" src="/pokeball-logo.png" alt="Pokeball" />
           <span className="title-text">
@@ -263,21 +340,17 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
           </span>
         </div>
 
-        {/* Scoreboard */}
         <div className="scoreboard">
           <div className="score-row">SCORE: {score}</div>
           <div className="score-row">HIGH SCORE: {bestScore}</div>
         </div>
 
-        {/* Difficulty badge */}
         <div className="difficulty-badge">{DIFFICULTY_LABEL[difficulty]}</div>
 
-        {/* Progress */}
         <div className="progress">
           {clicked.size} / {pokemon.length}
         </div>
 
-        {/* Card grid */}
         <div className="card-grid">
           {cards.map((p) => (
             <PokemonCard
@@ -292,7 +365,6 @@ export default function GameBoard({ pokemon, difficulty, onGameOver, onWin, onCa
         </div>
       </div>
 
-      {/* Confirm quit dialog */}
       {showConfirm && (
         <div className="confirm-overlay">
           <div className="confirm-dialog">
