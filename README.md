@@ -1,6 +1,6 @@
 # PokéMemory
 
-A retro Pokémon-themed memory card game built with React + TypeScript. Test your memory by clicking each Pokémon card only once — the cards shuffle after every click!
+A retro Pokémon-themed memory card game built with React + TypeScript. Test your memory by clicking each Pokémon card only once, the cards shuffle after every click!
 
 ---
 
